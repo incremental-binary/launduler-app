@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Launduler</string>
+    <string name="signin_google">Sign in with Google</string>
+    <string name="signup"><a href="launduler://signup">Sign up</a> with e-mail</string>
+    <string name="signin_email">Already signed up with e-mail? <a href="launduler://signin?auth=email">Sign in</a></string>
 </resources>

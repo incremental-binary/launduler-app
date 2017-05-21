@@ -9,10 +9,41 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="kr.ac.kaist.launduler.MainActivity">
+    tools:context="kr.ac.kaist.launduler.MainActivity"
+    android:background="?android:attr/colorBackground">
+
+    <Button
+        android:text="@string/signin_google"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/signin_google"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"/>
+        android:layout_above="@id/signin_google"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/launch_logo_margin"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:text="@string/app_name"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signin_google"
+        android:layout_centerInParent="true"
+        android:id="@+id/signup"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:text="@string/signup"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signup"
+        android:layout_centerInParent="true"
+        android:id="@+id/signin_email"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:text="@string/signin_email"/>
 </RelativeLayout>
