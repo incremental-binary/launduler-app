@@ -17,7 +17,8 @@
         android:orientation="vertical">
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/name_layout">
             <android.support.design.widget.TextInputEditText
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
@@ -27,7 +28,8 @@
         </android.support.design.widget.TextInputLayout>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:id="@+id/email_layout">
             <android.support.design.widget.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -38,7 +40,8 @@
        <android.support.design.widget.TextInputLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:layout_marginBottom="@dimen/signup_textfield_margin">
+           android:layout_marginBottom="@dimen/signup_textfield_margin"
+           android:id="@+id/password_layout">
            <android.support.design.widget.TextInputEditText
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
@@ -49,6 +52,7 @@
        <Button
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
+           android:enabled="false"
            android:id="@+id/signup"
            android:text="@string/create_account"/>
     </LinearLayout>
