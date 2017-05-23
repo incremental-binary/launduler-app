@@ -12,4 +12,6 @@
     <string name="name_empty">Enter your name.</string>
     <string name="email_invalid">Invalid e-mail.</string>
     <string name="password_empty">Enter password.</string>
+
+    <string name="signin">Sign in</string>
 </resources>

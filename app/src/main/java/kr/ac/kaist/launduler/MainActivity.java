@@ -16,5 +16,6 @@ public class MainActivity extends AppCompatActivity {
         MovementMethod mm = LinkMovementMethod.getInstance();
         ((TextView) findViewById(R.id.signup)).setMovementMethod(mm);
         ((TextView) findViewById(R.id.signin_email)).setMovementMethod(mm);
+
     }
 }
