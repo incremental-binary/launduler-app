@@ -4,4 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="launch_logo_margin">32dp</dimen>
     <dimen name="signup_textfield_margin">24dp</dimen>
+
+    <dimen name="list_single_height">48dp</dimen>
+    <dimen name="list_icon">24dp</dimen>
+    <dimen name="list_padding_horizontal">16dp</dimen>
 </resources>
