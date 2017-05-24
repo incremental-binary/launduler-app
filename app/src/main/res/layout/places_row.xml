@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_single_height"
+    android:paddingStart="@dimen/list_padding_horizontal"
+    android:paddingEnd="@dimen/list_padding_horizontal">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="@dimen/list_icon"
+        android:paddingStart="0dp"
+        android:paddingEnd="@dimen/list_padding_horizontal"
+        android:id="@+id/name"/>
+    <ImageView
+        android:layout_width="@dimen/list_icon"
+        android:layout_height="@dimen/list_icon"
+        android:layout_gravity="center_vertical|end"
+        android:visibility="gone"
+        android:id="@+id/check"
+        app:srcCompat="@drawable/ic_check_black_24dp"/>
+</FrameLayout>
