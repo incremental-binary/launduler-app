@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void startSelectPlace() {
-        Intent intent = new Intent(this, BaseSelectPlaceActivity.class);
+        Intent intent = new Intent(this, ExploreSelectPlaceActivity.class);
         startActivity(intent);
     }
 }
