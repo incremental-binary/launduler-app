@@ -77,7 +77,7 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
         return places.size();
     }
 
-    public Observable<Place> getPositionClicks() {
+    Observable<Place> getPositionClicks() {
         return onClickSubject;
     }
 }
