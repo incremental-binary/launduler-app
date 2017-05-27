@@ -17,14 +17,14 @@ import java.util.List;
 /**
  * Created by kyukyukyu on 24/05/2017.
  */
-class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
+public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
     private static final String TAG = "PlaceAdapter";
 
     private final List<Place> places;
     private final PublishSubject<Place> onClickSubject = PublishSubject.create();
     private Place lastSelected = null;
 
-    PlaceAdapter() {
+    public PlaceAdapter() {
         places = new ArrayList<>(10);
         for (int i = 0; i < 10; ++i) {
             places.add(new Place(i, "Room " + (i + 1)));
@@ -77,7 +77,7 @@ class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> {
         return places.size();
     }
 
-    Observable<Place> getPositionClicks() {
+    public Observable<Place> getPositionClicks() {
         return onClickSubject;
     }
 }
