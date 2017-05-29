@@ -19,10 +19,10 @@ import java.util.List;
  * Created by woonggyu on 2017. 5. 24..
  */
 public class MachineListAdapter extends ArrayAdapter<JSONObject> {
-    private final Activity context;
+    private final Context context;
     private List<JSONObject> objects;
 
-    public MachineListAdapter(Activity context, int resource, List<JSONObject> objects) {
+    public MachineListAdapter(Context context, int resource, List<JSONObject> objects) {
         super(context, resource, objects);
         this.context = context;
         this.objects = objects;
@@ -30,8 +30,8 @@ public class MachineListAdapter extends ArrayAdapter<JSONObject> {
 
     public View getView(int position, View convertView, ViewGroup parent){
 
-        LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.item_machine, null, true);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View rowView = inflater.inflate(R.layout.item_machine, null, true);
 
         TextView machineName = (TextView) rowView.findViewById(R.id.machine_name);
         ImageView machineImage = (ImageView) rowView.findViewById(R.id.machine_image);
