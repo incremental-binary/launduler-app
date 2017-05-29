@@ -39,6 +39,17 @@
                     android:scheme="launduler" />
             </intent-filter>
         </activity>
+        <activity android:name=".ExploreActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:host="signin"
+                    android:scheme="launduler" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

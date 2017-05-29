@@ -1,5 +1,6 @@
 package kr.ac.kaist.launduler;
 
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,10 +38,8 @@ public class SigninActivity extends AppCompatActivity {
                     toast.show();
                 }
                 else{
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Log in!", Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
+                    Intent intent=new Intent(SigninActivity.this,ExploreActivity.class);
+                    startActivity(intent);
                 }
 
             }
