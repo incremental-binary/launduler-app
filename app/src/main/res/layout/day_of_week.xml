@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:theme="@style/AppTheme"
+    android:layout_weight="1"
+    android:layout_width="0"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/letter"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/day_of_week_letter_height"/>
+    <ImageView
+        android:id="@+id/selected"
+        android:theme="@style/DayOfWeekImage"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/day_of_week_letter_height"
+        android:layout_width="@dimen/day_of_week_circle"
+        android:layout_height="@dimen/day_of_week_circle"
+        android:src="@drawable/day_of_week_selected"/>
+    <TextView
+        android:id="@+id/number"
+        android:theme="@style/DayOfWeekNumber"
+        android:textAlignment="center"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/day_of_week_letter_height"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/day_of_week_circle"/>
+
+</FrameLayout>

@@ -8,4 +8,7 @@
     <dimen name="list_single_height">48dp</dimen>
     <dimen name="list_icon">24dp</dimen>
     <dimen name="list_padding_horizontal">16dp</dimen>
+
+    <dimen name="day_of_week_letter_height">48dp</dimen>
+    <dimen name="day_of_week_circle">24dp</dimen>
 </resources>
