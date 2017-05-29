@@ -13,4 +13,27 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="DayOfWeekImage">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="DayOfWeekNumber">
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="DayOfWeekImage.Today">
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="DayOfWeekNumber.Today">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="DayOfWeekImage.Selected">
+        <item name="android:visibility">visible</item>
+    </style>
+
+    <style name="DayOfWeekNumber.Selected">
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+    </style>
 </resources>
