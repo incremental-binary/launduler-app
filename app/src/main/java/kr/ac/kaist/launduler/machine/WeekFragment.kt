@@ -8,7 +8,12 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 import kr.ac.kaist.launduler.R
 
 /**
@@ -16,6 +21,8 @@ import kr.ac.kaist.launduler.R
  */
 class WeekFragment : Fragment() {
     companion object {
+        val dayOfWeekSubject = PublishSubject.create<Int>()
+
         fun newInstance() : WeekFragment {
             val fragment = WeekFragment()
             val args = Bundle()
@@ -32,13 +39,8 @@ class WeekFragment : Fragment() {
         val layoutView = inflater?.inflate(R.layout.fragment_week, container, false)
         if (savedInstanceState == null) {
             val trx = childFragmentManager.beginTransaction()
-            val dows = DayOfWeekFragment.DayOfWeek.values()
             for (i in 1..7) {
-                val dow = DayOfWeekFragment.newInstance(dows[i - 1], i, when (i) {
-                    1 -> DayOfWeekFragment.State.TODAY
-                    3 -> DayOfWeekFragment.State.SELECTED
-                    else -> DayOfWeekFragment.State.DEFAULT
-                })
+                val dow = DayOfWeekFragment.newInstance(i, i, i == 3, i == 1)
                 trx.add(R.id.week, dow, "DAY_$i")
             }
             trx.commit()
@@ -49,30 +51,31 @@ class WeekFragment : Fragment() {
 
 
 class DayOfWeekFragment : Fragment() {
-    lateinit var dayOfWeek: DayOfWeek
+    var dayOfWeek: Int = 0
     lateinit var dayOfWeekChar: String
     var number: Int = 0
-    lateinit var state: State
-
-    enum class DayOfWeek {
-        SUN, MON, TUES, WED, THU, FRI, SAT
-    }
+    var selected = false
+    var today = false
+    val dowDisposables = CompositeDisposable()
 
     enum class State {
         DEFAULT, SELECTED, TODAY
     }
 
     companion object {
-        val DAY_OF_WEEK_INDEX = "DAY_OF_WEEK_INDEX"
-        val NUMBER = "NUMBER"
-        val STATE = "STATE"
+        const val DAY_OF_WEEK_INDEX = "DAY_OF_WEEK_INDEX"
+        const val NUMBER = "NUMBER"
+        const val SELECTED = "SELECTED"
+        const val TODAY = "TODAY"
 
-        fun newInstance(dayOfWeek: DayOfWeek, number: Int, state: State = State.DEFAULT) : DayOfWeekFragment {
+        fun newInstance(dayOfWeek: Int, number: Int, selected: Boolean = false,
+                        today: Boolean = false) : DayOfWeekFragment {
             val fragment = DayOfWeekFragment()
             val args = Bundle()
-            args.putString(DAY_OF_WEEK_INDEX, dayOfWeek.name)
+            args.putInt(DAY_OF_WEEK_INDEX, dayOfWeek)
             args.putInt(NUMBER, number)
-            args.putString(STATE, state.name)
+            args.putBoolean(SELECTED, selected)
+            args.putBoolean(TODAY, today)
             fragment.arguments = args
             return fragment
         }
@@ -81,11 +84,19 @@ class DayOfWeekFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments.let {
-            dayOfWeek = DayOfWeek.valueOf(arguments.getString(DAY_OF_WEEK_INDEX)!!)
-            dayOfWeekChar = resources.getStringArray(R.array.day_of_week_char)[dayOfWeek.ordinal]
+            dayOfWeek = arguments.getInt(DAY_OF_WEEK_INDEX)
+            dayOfWeekChar = resources.getStringArray(R.array.day_of_week_char)[dayOfWeek - 1]
             number = arguments.getInt(NUMBER)
-            state = State.valueOf(arguments.getString(STATE))
+            selected = arguments.getBoolean(SELECTED)
+            today = arguments.getBoolean(TODAY)
         }
+        dowDisposables.add(WeekFragment.dayOfWeekSubject
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { dow ->
+                    selected = dow == dayOfWeek
+                    updateView()
+                })
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -93,21 +104,35 @@ class DayOfWeekFragment : Fragment() {
 
         val vNumber = layoutView.findViewById(R.id.number) as TextView
         vNumber.text = number.toString()
-
-        val typedValue = TypedValue()
-        val theme = context.theme
-        val textColorAttr = when (state) {
-            State.SELECTED -> android.R.attr.colorBackground
-            State.TODAY -> android.support.v7.appcompat.R.attr.colorPrimary
-            State.DEFAULT -> android.R.attr.colorForeground
-        }
-        theme.resolveAttribute(textColorAttr, typedValue, true)
-        vNumber.setTextColor(typedValue.data)
+        vNumber.setOnClickListener { WeekFragment.dayOfWeekSubject.onNext(dayOfWeek) }
 
         (layoutView.findViewById(R.id.letter) as TextView).text = dayOfWeekChar
 
-        layoutView.findViewById(R.id.selected).visibility = if (state == State.SELECTED) { VISIBLE } else { GONE }
-
         return layoutView
+    }
+
+    override fun onStart() {
+        super.onStart()
+        updateView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dowDisposables.clear()
+    }
+
+    fun updateView() {
+        val vNumber = view?.findViewById(R.id.number) as TextView
+        val vSelected = view?.findViewById(R.id.selected) as ImageView
+        val typedValue = TypedValue()
+        val theme = context.theme
+        val textColorAttr =
+                if (selected) { android.R.attr.colorBackground }
+                else if (today) { android.support.v7.appcompat.R.attr.colorPrimary }
+                else { android.R.attr.colorForeground }
+        theme.resolveAttribute(textColorAttr, typedValue, true)
+        vNumber.setTextColor(typedValue.data)
+
+        vSelected.visibility = if (selected) { VISIBLE } else { GONE }
     }
 }

@@ -3,7 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:theme="@style/AppTheme"
     android:layout_weight="1"
-    android:layout_width="0"
+    android:paddingStart="@dimen/day_of_week_padding_horizontal"
+    android:paddingEnd="@dimen/day_of_week_padding_horizontal"
+    android:layout_width="0dp"
     android:layout_height="match_parent">
     <TextView
         android:id="@+id/letter"
@@ -21,6 +23,7 @@
         android:src="@drawable/day_of_week_selected"/>
     <TextView
         android:id="@+id/number"
+        android:clickable="true"
         android:theme="@style/DayOfWeekNumber"
         android:textAlignment="center"
         android:gravity="center_vertical"
