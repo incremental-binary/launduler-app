@@ -14,4 +14,14 @@
     <string name="password_empty">Enter password.</string>
 
     <string name="signin">Sign in</string>
+
+    <string-array name="day_of_week_char">
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>T</item>
+        <item>F</item>
+        <item>S</item>
+        <item>S</item>
+    </string-array>
 </resources>
