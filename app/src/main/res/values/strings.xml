@@ -19,12 +19,12 @@
     <string name="select_place">Select a Place</string>
 
     <string-array name="day_of_week_char">
+        <item>S</item>
         <item>M</item>
         <item>T</item>
         <item>W</item>
         <item>T</item>
         <item>F</item>
-        <item>S</item>
         <item>S</item>
     </string-array>
 </resources>
