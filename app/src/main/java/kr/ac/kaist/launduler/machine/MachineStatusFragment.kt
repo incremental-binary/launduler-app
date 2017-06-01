@@ -1,28 +1,27 @@
 package kr.ac.kaist.launduler.machine
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.trello.rxlifecycle2.components.support.RxFragment
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.PublishSubject
 import java.util.*
 import kotlinx.android.synthetic.main.fragment_status_machine.*
 import kr.ac.kaist.launduler.R
+import kr.ac.kaist.launduler.RxBus
 
 /**
  * Created by kyukyukyu on 31/05/2017.
  */
-class MachineStatusFragment : Fragment() {
+class MachineStatusFragment : RxFragment() {
     lateinit var selectedDay: Calendar
-    val disposables = CompositeDisposable()
-    val selectedDaySubject = PublishSubject.create<Calendar>()
 
     companion object {
         const val SELECTED_DAY = "SELECTED_DAY"
+        val selectedDaySubject = RxBus.getSubject(RxBus.SUBJECT_EXPLORE_SELECTED_DAY)
 
         fun newInstance(selectedDay: Calendar? = null) : MachineStatusFragment {
             val fragment = MachineStatusFragment()
@@ -42,13 +41,6 @@ class MachineStatusFragment : Fragment() {
         } else {
             // This is the first creation of this fragment.
             selectedDay = Calendar.getInstance()
-            disposables.add(selectedDaySubject
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe { newSelectedDay ->
-                        val dayOfWeek = newSelectedDay.get(Calendar.DAY_OF_WEEK)
-                        WeekFragment.dayOfWeekSubject.onNext(dayOfWeek)
-                    })
         }
     }
 
@@ -57,7 +49,7 @@ class MachineStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weekFragment = WeekFragment.newInstance(Calendar.getInstance())
+        val weekFragment = WeekFragment.newInstance(Calendar.getInstance(), RxBus.SUBJECT_EXPLORE_SELECTED_DAY)
         childFragmentManager
                 .beginTransaction()
                 .replace(R.id.week, weekFragment, "WEEK")
@@ -73,10 +65,5 @@ class MachineStatusFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
         outState?.putSerializable(SELECTED_DAY, selectedDay)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposables.clear()
     }
 }
