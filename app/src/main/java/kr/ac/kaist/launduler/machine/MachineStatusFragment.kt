@@ -60,6 +60,11 @@ class MachineStatusFragment : RxFragment() {
         super.onActivityCreated(savedInstanceState)
         day.setMonthChangeListener { _, _ -> listOf() }
         day.setScrollListener { newFirstVisibleDay, _ -> selectedDaySubject.onNext(newFirstVisibleDay) }
+        selectedDaySubject
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .bindToLifecycle(this)
+                .subscribe { day.goToDate(it as Calendar) }
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
