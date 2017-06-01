@@ -57,7 +57,7 @@ class MachineStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val weekFragment = WeekFragment.newInstance()
+        val weekFragment = WeekFragment.newInstance(Calendar.getInstance())
         childFragmentManager
                 .beginTransaction()
                 .replace(R.id.week, weekFragment, "WEEK")

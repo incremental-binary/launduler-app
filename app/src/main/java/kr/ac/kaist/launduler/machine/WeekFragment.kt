@@ -15,33 +15,60 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kr.ac.kaist.launduler.R
+import java.util.*
 
 /**
  * Created by kyukyukyu on 29/05/2017.
  */
 class WeekFragment : Fragment() {
+    lateinit var selectedDay: Calendar
+
     companion object {
+        const val SELECTED_DAY = "SELECTED_DAY"
         val dayOfWeekSubject = PublishSubject.create<Int>()
 
-        fun newInstance() : WeekFragment {
+        fun newInstance(selectedDay: Calendar) : WeekFragment {
             val fragment = WeekFragment()
             val args = Bundle()
+            args.putSerializable(SELECTED_DAY, selectedDay)
             fragment.arguments = args
             return fragment
+        }
+
+        fun discardTime(calendar: Calendar) {
+            calendar.set(Calendar.HOUR_OF_DAY, 0)
+            calendar.set(Calendar.MINUTE, 0)
+            calendar.set(Calendar.MILLISECOND, 0)
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        selectedDay = arguments!!.getSerializable(SELECTED_DAY) as Calendar
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layoutView = inflater?.inflate(R.layout.fragment_week, container, false)
         if (savedInstanceState == null) {
+            val selectedDow = selectedDay.get(Calendar.DAY_OF_WEEK)
+
+            var day = selectedDay.clone() as Calendar
+            discardTime(day)
+            day.set(Calendar.DAY_OF_WEEK, day.firstDayOfWeek)
+
+            val today = Calendar.getInstance()
+            discardTime(today)
+
             val trx = childFragmentManager.beginTransaction()
             for (i in 1..7) {
-                val dow = DayOfWeekFragment.newInstance(i, i, i == 3, i == 1)
-                trx.add(R.id.week, dow, "DAY_$i")
+                val dow = day.get(Calendar.DAY_OF_WEEK)
+                val fragment = DayOfWeekFragment.newInstance(
+                        dow,
+                        day.get(Calendar.DAY_OF_MONTH),
+                        dow == selectedDow,
+                        day.compareTo(today) == 0)
+                trx.add(R.id.week, fragment, "DAY_$i")
+                day.add(Calendar.DAY_OF_MONTH, 1)
             }
             trx.commit()
         }
