@@ -10,11 +10,13 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.trello.rxlifecycle2.components.support.RxFragment
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import kr.ac.kaist.launduler.R
+import kr.ac.kaist.launduler.RxBus
 import java.util.*
 
 /**
@@ -22,15 +24,17 @@ import java.util.*
  */
 class WeekFragment : Fragment() {
     lateinit var selectedDay: Calendar
+    var selectedDaySubjectKey = 0L
 
     companion object {
         const val SELECTED_DAY = "SELECTED_DAY"
-        val dayOfWeekSubject = PublishSubject.create<Int>()
+        const val SELECTED_DAY_SUBJECT_KEY = "SELECTED_DAY_SUBJECT_KEY"
 
-        fun newInstance(selectedDay: Calendar) : WeekFragment {
+        fun newInstance(selectedDay: Calendar, selectedDaySubjectKey: Long) : WeekFragment {
             val fragment = WeekFragment()
             val args = Bundle()
             args.putSerializable(SELECTED_DAY, selectedDay)
+            args.putLong(SELECTED_DAY_SUBJECT_KEY, selectedDaySubjectKey)
             fragment.arguments = args
             return fragment
         }
@@ -45,6 +49,7 @@ class WeekFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         selectedDay = arguments!!.getSerializable(SELECTED_DAY) as Calendar
+        selectedDaySubjectKey = arguments!!.getLong(SELECTED_DAY_SUBJECT_KEY)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,11 +68,12 @@ class WeekFragment : Fragment() {
             for (i in 1..7) {
                 val dow = day.get(Calendar.DAY_OF_WEEK)
                 val fragment = DayOfWeekFragment.newInstance(
-                        dow,
-                        day.get(Calendar.DAY_OF_MONTH),
+                        day,
                         dow == selectedDow,
-                        day.compareTo(today) == 0)
+                        day.compareTo(today) == 0,
+                        selectedDaySubjectKey)
                 trx.add(R.id.week, fragment, "DAY_$i")
+                day = day.clone() as Calendar
                 day.add(Calendar.DAY_OF_MONTH, 1)
             }
             trx.commit()
@@ -77,32 +83,29 @@ class WeekFragment : Fragment() {
 }
 
 
-class DayOfWeekFragment : Fragment() {
+class DayOfWeekFragment : RxFragment() {
+    lateinit var day: Calendar
     var dayOfWeek: Int = 0
     lateinit var dayOfWeekChar: String
     var number: Int = 0
     var selected = false
     var today = false
-    val dowDisposables = CompositeDisposable()
-
-    enum class State {
-        DEFAULT, SELECTED, TODAY
-    }
+    lateinit var selectedDaySubject: PublishSubject<Any>
 
     companion object {
-        const val DAY_OF_WEEK_INDEX = "DAY_OF_WEEK_INDEX"
-        const val NUMBER = "NUMBER"
+        const val DAY = "DAY"
         const val SELECTED = "SELECTED"
         const val TODAY = "TODAY"
+        const val SELECTED_DAY_SUBJECT_KEY = "SELECTED_DAY_SUBJECT_KEY"
 
-        fun newInstance(dayOfWeek: Int, number: Int, selected: Boolean = false,
-                        today: Boolean = false) : DayOfWeekFragment {
+        fun newInstance(day: Calendar, selected: Boolean = false,
+                        today: Boolean = false, selectedDaySubjectKey: Long) : DayOfWeekFragment {
             val fragment = DayOfWeekFragment()
             val args = Bundle()
-            args.putInt(DAY_OF_WEEK_INDEX, dayOfWeek)
-            args.putInt(NUMBER, number)
+            args.putSerializable(DAY, day)
             args.putBoolean(SELECTED, selected)
             args.putBoolean(TODAY, today)
+            args.putLong(SELECTED_DAY_SUBJECT_KEY, selectedDaySubjectKey)
             fragment.arguments = args
             return fragment
         }
@@ -110,20 +113,22 @@ class DayOfWeekFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments.let {
-            dayOfWeek = arguments.getInt(DAY_OF_WEEK_INDEX)
+        arguments.apply {
+            day = getSerializable(DAY) as Calendar
+            dayOfWeek = day.get(Calendar.DAY_OF_WEEK)
             dayOfWeekChar = resources.getStringArray(R.array.day_of_week_char)[dayOfWeek - 1]
-            number = arguments.getInt(NUMBER)
-            selected = arguments.getBoolean(SELECTED)
-            today = arguments.getBoolean(TODAY)
+            number = day.get(Calendar.DAY_OF_MONTH)
+            selected = getBoolean(SELECTED)
+            today = getBoolean(TODAY)
+            selectedDaySubject = RxBus.getSubject(getLong(SELECTED_DAY_SUBJECT_KEY))
         }
-        dowDisposables.add(WeekFragment.dayOfWeekSubject
+        selectedDaySubject
                 .subscribeOn(Schedulers.io())
+                .map { (it as Calendar).get(Calendar.DAY_OF_WEEK) }
+                .map { selected = it == dayOfWeek }
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { dow ->
-                    selected = dow == dayOfWeek
-                    updateView()
-                })
+                .bindToLifecycle(this)
+                .subscribe { updateView() }
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -131,7 +136,7 @@ class DayOfWeekFragment : Fragment() {
 
         val vNumber = layoutView.findViewById(R.id.number) as TextView
         vNumber.text = number.toString()
-        vNumber.setOnClickListener { WeekFragment.dayOfWeekSubject.onNext(dayOfWeek) }
+        vNumber.setOnClickListener { selectedDaySubject.onNext(day) }
 
         (layoutView.findViewById(R.id.letter) as TextView).text = dayOfWeekChar
 
@@ -141,11 +146,6 @@ class DayOfWeekFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         updateView()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        dowDisposables.clear()
     }
 
     fun updateView() {

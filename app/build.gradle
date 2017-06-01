@@ -36,6 +36,8 @@ dependencies {
     // explicitly depend on RxJava's latest version for bug fixes and new features.
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'com.github.alamkanak:android-week-view:1.2.6'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.1.0'
+    compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
     testCompile 'junit:junit:4.12'
 }
 repositories {
