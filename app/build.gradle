@@ -51,6 +51,8 @@ dependencies {
     compile 'com.github.alamkanak:android-week-view:1.2.6'
     compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.1.0'
     compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
+    // Material datetime picker.
+    compile 'co.infinum:materialdatetimepicker-support:3.2.2'
     testCompile 'junit:junit:4.12'
 }
 repositories {
