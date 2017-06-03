@@ -26,4 +26,10 @@
         app:todayBackgroundColor="#1848adff"
         app:headerColumnBackground="#ffffffff"
         app:showNowLine="true"/>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floating_action_button"
+        android:layout_gravity="bottom|end"
+        app:useCompatPadding="true"
+        android:layout_width="@dimen/floating_action_button"
+        android:layout_height="@dimen/floating_action_button"/>
 </FrameLayout>
