@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import kr.ac.kaist.launduler.machine.MachineStatusFragment;
-import kr.ac.kaist.launduler.machine.WeekFragment;
 
 public class ExploreActivity extends AppCompatActivity {
 
@@ -16,7 +15,8 @@ public class ExploreActivity extends AppCompatActivity {
 
         //Fragment fragment = ExploreFragment.newInstance();
         if (savedInstanceState == null) {
-            Fragment fragment = MachineStatusFragment.Companion.newInstance(null);
+            String selectedMachineId = getSelectedMachineId();
+            Fragment fragment = MachineStatusFragment.Companion.newInstance(null, selectedMachineId);
 
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager
@@ -24,5 +24,9 @@ public class ExploreActivity extends AppCompatActivity {
                     .replace(R.id.content_frame, fragment, "EXPLORE")
                     .commit();
         }
+    }
+
+    protected String getSelectedMachineId() {
+        return "selectedMachine1";
     }
 }

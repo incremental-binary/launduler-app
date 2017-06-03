@@ -15,3 +15,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-ignorewarnings
+-keepattributes *Annotation*
+
+-keep class kotlin.** { *; }
+-keep class org.jetbrains.** { *; }
+-keep class kr.ac.kaist.launduler.models.** { *; }
