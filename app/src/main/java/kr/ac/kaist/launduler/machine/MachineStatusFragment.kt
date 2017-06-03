@@ -95,6 +95,9 @@ class MachineStatusFragment : RxFragment() {
 
     override fun onSaveInstanceState(outState: Bundle?) {
         super.onSaveInstanceState(outState)
-        outState?.putSerializable(SELECTED_DAY, selectedDay)
+        outState?.apply {
+            putSerializable(SELECTED_DAY, selectedDay)
+            putString(MACHINE_ID, machineId)
+        }
     }
 }
