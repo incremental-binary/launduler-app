@@ -24,4 +24,6 @@
         <item>F</item>
         <item>S</item>
     </string-array>
+
+    <string name="error_machine_reservations">Failed to retrieve the reservation list.</string>
 </resources>
