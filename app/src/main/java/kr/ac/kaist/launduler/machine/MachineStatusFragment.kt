@@ -39,7 +39,7 @@ abstract class MachineStatusFragment :
         const val MACHINE_ID = "MACHINE_ID"
         const val PICKED_DATETIME = "PICKED_DATETIME"
         val selectedDaySubject = RxBus.getSubject(RxBus.SUBJECT_EXPLORE_SELECTED_DAY)
-        val selectableTimes = (0..(24 * 60) step Reservation.LENGTH_MINUTE)
+        val selectableTimes = (0 until (24 * 60) step Reservation.LENGTH_MINUTE)
                 .map { Timepoint(it / 60, it % 60) }
                 .toTypedArray()
 
