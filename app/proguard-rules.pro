@@ -20,4 +20,5 @@
 
 -keep class kotlin.** { *; }
 -keep class org.jetbrains.** { *; }
+-keep class **.*Fragment
 -keep class kr.ac.kaist.launduler.models.** { *; }

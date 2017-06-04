@@ -11,6 +11,7 @@ import com.trello.rxlifecycle2.kotlin.bindToLifecycle
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import com.wdullaer.materialdatetimepicker.time.Timepoint
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -19,17 +20,19 @@ import kr.ac.kaist.launduler.R
 import kr.ac.kaist.launduler.RxBus
 import kr.ac.kaist.launduler.models.Reservation
 import kr.ac.kaist.launduler.services.laundulerService
+import kotlin.reflect.full.createInstance
 
 /**
  * Created by kyukyukyu on 31/05/2017.
  */
-class MachineStatusFragment :
+abstract class MachineStatusFragment :
         RxFragment(),
         DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener {
     var selectedDay: Calendar = Calendar.getInstance()
     lateinit var machineId: String
     var pickedDatetime: Calendar = Calendar.getInstance()
+    abstract val floatingActionButtonSrc: Int
 
     companion object {
         const val SELECTED_DAY = "SELECTED_DAY"
@@ -40,8 +43,9 @@ class MachineStatusFragment :
                 .map { Timepoint(it / 60, it % 60) }
                 .toTypedArray()
 
-        fun newInstance(selectedDay: Calendar? = null, machineId: String) : MachineStatusFragment {
-            val fragment = MachineStatusFragment()
+        inline fun <reified T : MachineStatusFragment> newInstance(selectedDay: Calendar? = null,
+                                                                   machineId: String) : T {
+            val fragment = T::class.createInstance()
             val args = Bundle()
             args.putSerializable(SELECTED_DAY, selectedDay)
             args.putString(MACHINE_ID, machineId)
@@ -74,6 +78,12 @@ class MachineStatusFragment :
         super.onActivityCreated(savedInstanceState)
         day.setMonthChangeListener { _, _ -> listOf() }
         day.setScrollListener { newFirstVisibleDay, _ -> selectedDaySubject.onNext(newFirstVisibleDay) }
+        Single.just(floatingActionButtonSrc)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .bindToLifecycle(this)
+                .map { resources.getDrawable(it) }
+                .subscribe { drawable -> floating_action_button.setImageDrawable(drawable) }
         floating_action_button.setOnClickListener {
             val now = Calendar.getInstance()
             val dt = maxOf(now, selectedDay)
@@ -109,6 +119,7 @@ class MachineStatusFragment :
                                 }
                             }
                 } }, { Snackbar.make(view!!, R.string.error_machine_reservations, Snackbar.LENGTH_LONG) })
+        setupToolbar()
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -138,6 +149,25 @@ class MachineStatusFragment :
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }
-        // TODO: make an API request for the reservation.
+        processPickedDatetime(pickedDatetime)
+    }
+
+    abstract fun processPickedDatetime(dt: Calendar)
+
+    abstract fun setupToolbar()
+}
+
+
+class ExploreMachineStatusFragment : MachineStatusFragment() {
+    override val floatingActionButtonSrc: Int = R.drawable.ic_add_white_24dp
+
+    override fun processPickedDatetime(dt: Calendar) {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun setupToolbar() {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
+
+

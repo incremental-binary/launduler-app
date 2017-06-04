@@ -2,6 +2,7 @@ package kr.ac.kaist.launduler
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import kr.ac.kaist.launduler.machine.ExploreMachineStatusFragment
 import kr.ac.kaist.launduler.machine.MachineStatusFragment
 
 class ExploreActivity : AppCompatActivity() {
@@ -13,7 +14,7 @@ class ExploreActivity : AppCompatActivity() {
         //Fragment fragment = ExploreFragment.newInstance();
         if (savedInstanceState == null) {
             val selectedMachineId = selectedMachineId
-            val fragment = MachineStatusFragment.newInstance(null, selectedMachineId)
+            val fragment = MachineStatusFragment.newInstance<ExploreMachineStatusFragment>(null, selectedMachineId)
 
             val fragmentManager = supportFragmentManager
             fragmentManager
