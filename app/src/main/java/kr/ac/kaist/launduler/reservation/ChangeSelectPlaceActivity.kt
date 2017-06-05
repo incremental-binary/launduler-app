@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.ActionBar
 import kr.ac.kaist.launduler.BaseSelectPlaceActivity
 import kr.ac.kaist.launduler.R
-import kr.ac.kaist.launduler.model.Place
+import kr.ac.kaist.launduler.models.Place
 
 class ChangeSelectPlaceActivity : BaseSelectPlaceActivity() {
     override fun setupToolbar(ab: ActionBar?) {

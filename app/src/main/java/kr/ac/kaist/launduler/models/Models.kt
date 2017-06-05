@@ -24,3 +24,8 @@ data class Reservation(val machine: String,
         ret
     }
 }
+
+/**
+ * A place where washing machines are installed.
+ */
+data class Place(val id: Long, val name: String)

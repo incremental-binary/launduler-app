@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import io.reactivex.functions.Consumer;
-import kr.ac.kaist.launduler.model.Place;
+import kr.ac.kaist.launduler.models.Place;
 
 public abstract class BaseSelectPlaceActivity extends AppCompatActivity {
     protected Toolbar mToolbar;

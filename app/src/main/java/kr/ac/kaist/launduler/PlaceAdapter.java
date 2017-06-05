@@ -9,7 +9,7 @@ import android.widget.TextView;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
-import kr.ac.kaist.launduler.model.Place;
+import kr.ac.kaist.launduler.models.Place;
 
 import java.util.ArrayList;
 import java.util.List;
