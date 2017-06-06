@@ -59,4 +59,9 @@
 
     <!-- Explore menu -->
     <string name="action_select_place">Select Place</string>
+
+    <string name="machine_available">Available</string>
+    <string name="machine_in_use">In Use</string>
+    <string name="machine_out_of_order">Out of Order</string>
+    <string name="error_machines">Failed to retrieve the machine list.</string>
 </resources>

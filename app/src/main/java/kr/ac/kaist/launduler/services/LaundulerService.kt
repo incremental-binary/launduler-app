@@ -16,7 +16,6 @@ import retrofit2.http.Query
  * Created by kyukyukyu on 29/05/2017.
  */
 val laundulerService = Retrofit.Builder()
-        //.baseUrl("http://launduler.kaist.ac.kr/")
         .baseUrl("http://143.248.48.156:5500/")
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(JacksonConverterFactory.create(jacksonObjectMapper()))
@@ -25,8 +24,8 @@ val laundulerService = Retrofit.Builder()
 
 interface LaundulerService {
     @Headers("Accept: application/json")
-    @GET("place/{placeId}/machine")
-    fun getMachinesInPlace(@Path("placeId") placeId: String): Observable<List<Machine>>
+    @GET("machine")
+    fun getMachinesInPlace(@Query("placeId") placeId: Long): Observable<List<Machine>>
 
     @Headers("Accept: application/json")
     @GET("machine/{machineId}")

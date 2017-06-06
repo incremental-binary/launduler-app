@@ -11,6 +11,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.trello.rxlifecycle2.components.support.RxFragment
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kr.ac.kaist.launduler.ExploreActivity.Companion.REQUEST_SELECT_PLACE
 import kr.ac.kaist.launduler.ExploreSelectPlaceActivity.EXTRA_PLACE_ID
@@ -70,6 +73,16 @@ class ExploreFragment : RxFragment(), OptionsMenuFragment {
     }
 
     fun retrieveMachineList(placeId: Long) {
+        laundulerService.getMachinesInPlace(placeId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .bindToLifecycle(this)
+                .subscribe({
+                    val adapter = MachineListAdapter(activity, R.layout.item_machine, it)
+                    list_machines.adapter = adapter
+                }, {
+                    Snackbar.make(view!!, R.string.error_machines, Snackbar.LENGTH_LONG).show()
+                })
     }
 
     private fun selectPlace() {

@@ -1,6 +1,5 @@
 package kr.ac.kaist.launduler;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import kr.ac.kaist.launduler.models.Machine;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,14 +18,16 @@ import java.util.List;
 /**
  * Created by woonggyu on 2017. 5. 24..
  */
-public class MachineListAdapter extends ArrayAdapter<JSONObject> {
-    private final Context context;
-    private List<JSONObject> objects;
+public class MachineListAdapter extends ArrayAdapter<Machine> {
+    private static final String TAG = MachineListAdapter.class.getSimpleName();
 
-    public MachineListAdapter(Context context, int resource, List<JSONObject> objects) {
+    private final Context context;
+    private List<Machine> machines;
+
+    public MachineListAdapter(Context context, int resource, List<Machine> objects) {
         super(context, resource, objects);
         this.context = context;
-        this.objects = objects;
+        this.machines = objects;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
@@ -36,17 +38,21 @@ public class MachineListAdapter extends ArrayAdapter<JSONObject> {
         TextView machineName = (TextView) rowView.findViewById(R.id.machine_name);
         ImageView machineImage = (ImageView) rowView.findViewById(R.id.machine_image);
         TextView machineStatus = (TextView) rowView.findViewById(R.id.machine_status);
-        try {
-            JSONObject machine = objects.get(position);
-            machineName.setText(machine.getString("SerialNum"));
-            machineImage.setImageResource(R.mipmap.ic_launcher);
-            machineStatus.setText(machine.getString("isUse"));
-            Log.d("asdf",machine.getString("SerialNum"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-            Log.d("asdf", "Fail");
-        }
 
+        Machine machine = machines.get(position);
+        machineName.setText(machine.getSerialNum());
+        machineImage.setImageResource(R.mipmap.ic_launcher);
+        CharSequence statusText;
+        if (machine.isBroken()) {
+            statusText = context.getText(R.string.machine_out_of_order);
+        } else if (machine.getInUse()) {
+            statusText = context.getText(R.string.machine_in_use);
+        } else {
+            statusText = context.getText(R.string.machine_available);
+        }
+        machineStatus.setText(statusText);
+
+        Log.d(TAG, machine.getSerialNum());
 
         return rowView;
     }
