@@ -28,5 +28,26 @@
         <item>S</item>
     </string-array>
 
+    <string-array name="navigation_drawer_user">
+        <item>Explore</item>
+        <item>Reservation</item>
+        <item>Timer</item>
+        <item>Tips</item>
+        <item>Alternatives</item>
+    </string-array>
+
+    <string-array name="navigation_drawer_manager">
+        <item>Hours of Operation</item>
+        <item>Report fix</item>
+        <item>Links</item>
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
     <string name="error_machine_reservations">Failed to retrieve the reservation list.</string>
+    <string name="title_activity_explore2">Explore2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

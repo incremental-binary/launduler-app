@@ -38,7 +38,7 @@ public class SigninActivity extends AppCompatActivity {
                     toast.show();
                 }
                 else{
-                    Intent intent=new Intent(SigninActivity.this,ExploreActivity.class);
+                    Intent intent=new Intent(SigninActivity.this, ExploreActivity.class);
                     startActivity(intent);
                 }
 
