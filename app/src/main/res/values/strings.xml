@@ -15,8 +15,10 @@
 
     <string name="signin">Sign in</string>
 
+    <!-- Select a Place screen -->
     <string name="select">Select</string>
     <string name="select_place">Select a Place</string>
+    <string name="error_places">Failed to retrieve the place list.</string>
 
     <string-array name="day_of_week_char">
         <item>S</item>

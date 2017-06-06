@@ -31,4 +31,6 @@ data class Reservation(val id: Long,
 /**
  * A place where washing machines are installed.
  */
-data class Place(val id: Long, val name: String)
+data class Place(val id: Long,
+                 val location: String,
+                 val operationTime: String)

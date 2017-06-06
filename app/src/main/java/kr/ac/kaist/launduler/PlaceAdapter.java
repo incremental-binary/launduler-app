@@ -24,11 +24,8 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     private final PublishSubject<Place> onClickSubject = PublishSubject.create();
     private Place lastSelected = null;
 
-    public PlaceAdapter() {
-        places = new ArrayList<>(10);
-        for (int i = 0; i < 10; ++i) {
-            places.add(new Place(i, "Room " + (i + 1)));
-        }
+    public PlaceAdapter(List<Place> places) {
+        this.places = places;
         getPositionClicks().subscribe(new Consumer<Place>() {
             @Override
             public void accept(Place p) throws Exception {
@@ -62,7 +59,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         final Place p = places.get(position);
-        holder.mName.setText(p.getName());
+        holder.mName.setText(p.getLocation());
         holder.mCheck.setVisibility(p == lastSelected ? View.VISIBLE : View.GONE);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

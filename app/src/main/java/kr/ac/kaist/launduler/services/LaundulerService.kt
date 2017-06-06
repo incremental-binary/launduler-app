@@ -4,6 +4,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.reactivex.Observable
 import kr.ac.kaist.launduler.models.Machine
 import kr.ac.kaist.launduler.models.Reservation
+import kr.ac.kaist.launduler.models.Place
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.jackson.JacksonConverterFactory
@@ -34,4 +35,8 @@ interface LaundulerService {
     @Headers("Accept: application/json")
     @GET("reservation/")
     fun getReservation(@Query("userId") userId : String): Observable<List<Reservation>>
+
+    @Headers("Accept: application/json")
+    @GET("place")
+    fun getPlaces(): Observable<List<Place>>
 }
