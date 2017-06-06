@@ -16,6 +16,9 @@ import kr.ac.kaist.launduler.services.LaundulerServiceKt;
 import java.util.List;
 
 public abstract class BaseSelectPlaceActivity extends RxAppCompatActivity {
+    public static final String EXTRA_PLACE_ID = "PLACE_ID";
+    private static final String SELECTED_PLACE_ID = "SELECTED_PLACE_ID";
+
     protected Toolbar mToolbar;
     protected RecyclerView mPlaces;
     protected PlaceAdapter mAdapter;
@@ -24,7 +27,7 @@ public abstract class BaseSelectPlaceActivity extends RxAppCompatActivity {
     protected Place lastSelected = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base_select_place);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -46,8 +49,16 @@ public abstract class BaseSelectPlaceActivity extends RxAppCompatActivity {
                 .compose(bindToLifecycle())
                 .subscribe(new Consumer<Object>() {
                     @Override
-                    public void accept(Object places) throws Exception {
-                        mAdapter = new PlaceAdapter((List<Place>) places);
+                    public void accept(Object o) throws Exception {
+                        List<Place> places = (List<Place>) o;
+                        long placeId = -1;
+                        if (savedInstanceState != null) {
+                            placeId = savedInstanceState.getLong(SELECTED_PLACE_ID);
+                        } else if (getIntent() != null) {
+                            placeId = getIntent().getLongExtra(EXTRA_PLACE_ID, -1);
+                        }
+                        lastSelected = findPlace(placeId, places);
+                        mAdapter = new PlaceAdapter(places, lastSelected);
                         mAdapter.getPositionClicks().subscribe(new Consumer<Place>() {
                             @Override
                             public void accept(Place p) throws Exception {
@@ -67,8 +78,24 @@ public abstract class BaseSelectPlaceActivity extends RxAppCompatActivity {
                 });
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putLong(SELECTED_PLACE_ID, lastSelected.getId());
     }
 
     protected abstract void setupToolbar(ActionBar ab);
+
+    private Place findPlace(long placeId, List<Place> places) {
+        if (placeId < 0) {
+            return null;
+        }
+        for (Place p : places) {
+            if (p.getId() == placeId) {
+                return p;
+            }
+        }
+        return null;
+    }
 
 }

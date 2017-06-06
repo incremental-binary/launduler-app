@@ -22,7 +22,6 @@ import android.view.MenuItem;
  * and the user is navigated to the parent activity.
  */
 public class ExploreSelectPlaceActivity extends BaseSelectPlaceActivity {
-    public static final String EXTRA_PLACE_ID = "PLACE_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

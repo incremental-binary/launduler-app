@@ -24,8 +24,9 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.ViewHolder> 
     private final PublishSubject<Place> onClickSubject = PublishSubject.create();
     private Place lastSelected = null;
 
-    public PlaceAdapter(List<Place> places) {
+    public PlaceAdapter(List<Place> places, Place selected) {
         this.places = places;
+        this.lastSelected = selected;
         getPositionClicks().subscribe(new Consumer<Place>() {
             @Override
             public void accept(Place p) throws Exception {

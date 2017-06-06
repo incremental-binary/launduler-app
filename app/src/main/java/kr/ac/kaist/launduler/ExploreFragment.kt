@@ -16,7 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kr.ac.kaist.launduler.ExploreActivity.Companion.REQUEST_SELECT_PLACE
-import kr.ac.kaist.launduler.ExploreSelectPlaceActivity.EXTRA_PLACE_ID
+import kr.ac.kaist.launduler.BaseSelectPlaceActivity.EXTRA_PLACE_ID
 import kr.ac.kaist.launduler.services.laundulerService
 
 /**
@@ -42,6 +42,7 @@ class ExploreFragment : RxFragment(), OptionsMenuFragment {
         val strSelectedPlaceId = getString(R.string.selected_place_id)
         if (sharedPreferences.contains(strSelectedPlaceId)) {
             val placeId = sharedPreferences.getLong(strSelectedPlaceId, -1)
+            selectedPlaceId = placeId
             retrieveMachineList(placeId)
         } else {
             selectPlace()
