@@ -1,12 +1,8 @@
 package kr.ac.kaist.launduler
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
-import android.view.View
 import android.support.design.widget.NavigationView
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -27,6 +23,8 @@ import java.util.*
 
 class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    lateinit var fragment: Fragment
+
     companion object {
         const val REQUEST_SELECT_PLACE = 1
     }
@@ -38,7 +36,7 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
-            val fragment = ExploreFragment.newInstance()
+            fragment = ExploreFragment.newInstance()
             val fragmentManager = supportFragmentManager
             fragmentManager
                     .beginTransaction()
@@ -67,22 +65,13 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.explore, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        val id = item.itemId
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true
+        if (fragment is OptionsMenuFragment) {
+            fragment.setHasOptionsMenu(true)
+            menuInflater.inflate((fragment as OptionsMenuFragment).menuResId, menu)
+        } else {
+            menu.clear()
         }
-
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

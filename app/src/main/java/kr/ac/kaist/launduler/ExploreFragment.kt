@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.trello.rxlifecycle2.components.support.RxFragment
@@ -20,7 +21,9 @@ import kr.ac.kaist.launduler.services.laundulerService
  * Use the [ExploreFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ExploreFragment : RxFragment() {
+class ExploreFragment : RxFragment(), OptionsMenuFragment {
+    override val menuResId: Int = R.menu.explore
+    var selectedPlaceId = -1L
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -29,6 +32,8 @@ class ExploreFragment : RxFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        // Load selected place ID from shared preferences or have it set if it's not set.
         val sharedPreferences =
                 activity.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
         val strSelectedPlaceId = getString(R.string.selected_place_id)
@@ -36,8 +41,7 @@ class ExploreFragment : RxFragment() {
             val placeId = sharedPreferences.getLong(strSelectedPlaceId, -1)
             retrieveMachineList(placeId)
         } else {
-            val intent = Intent(activity, ExploreSelectPlaceActivity::class.java)
-            startActivityForResult(intent, REQUEST_SELECT_PLACE)
+            selectPlace()
         }
     }
 
@@ -53,6 +57,7 @@ class ExploreFragment : RxFragment() {
                 if (placeId < 0) {
                     throw IllegalArgumentException("invalid place ID")
                 }
+                selectedPlaceId = placeId
                 val sharedPreferences =
                         activity.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
                 val strSelectedPlaceId = getString(R.string.selected_place_id)
@@ -65,6 +70,20 @@ class ExploreFragment : RxFragment() {
     }
 
     fun retrieveMachineList(placeId: Long) {
+    }
+
+    private fun selectPlace() {
+        val intent = Intent(activity, ExploreSelectPlaceActivity::class.java)
+        intent.putExtra(EXTRA_PLACE_ID, selectedPlaceId)
+        startActivityForResult(intent, REQUEST_SELECT_PLACE)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_select_place -> selectPlace()
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     companion object {
