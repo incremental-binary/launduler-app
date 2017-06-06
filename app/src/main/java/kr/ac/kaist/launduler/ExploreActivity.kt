@@ -1,5 +1,7 @@
 package kr.ac.kaist.launduler
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.Snackbar
@@ -25,6 +27,10 @@ import java.util.*
 
 class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    companion object {
+        const val REQUEST_SELECT_PLACE = 1
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_explore)
@@ -32,17 +38,13 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         setSupportActionBar(toolbar)
 
         if (savedInstanceState == null) {
-            val selectedMachineId = selectedMachineId
-            val fragment = MachineStatusFragment.newInstance<ExploreMachineStatusFragment>(null, selectedMachineId)
-
+            val fragment = ExploreFragment.newInstance()
             val fragmentManager = supportFragmentManager
             fragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment, "EXPLORE")
                     .commit()
         }
-
-
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
@@ -161,6 +163,7 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
+
     protected val selectedMachineId: String
         get() = "selectedMachine1"
 
