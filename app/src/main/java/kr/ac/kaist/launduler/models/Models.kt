@@ -1,13 +1,13 @@
 package kr.ac.kaist.launduler.models
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import kr.ac.kaist.launduler.CustomDateDeserializer
+import com.fasterxml.jackson.annotation.JsonFormat
 import java.util.*
 
 /**
  * Created by kyukyukyu on 02/06/2017.
  */
-data class Machine(val serialNum: String,
+data class Machine(val id: Long,
+                   val serialNum: String,
                    val location: String,
                    val inUse: Boolean,
                    val isBroken: Boolean,
@@ -15,7 +15,10 @@ data class Machine(val serialNum: String,
 
 data class Reservation(val id: Long,
                        val machine: String,
-                       @JsonDeserialize(using = CustomDateDeserializer::class) val scheduledAt: Calendar,
+                       @JsonFormat(
+                               shape = JsonFormat.Shape.STRING,
+                               pattern = "yyyy-MM-dd HH:mm:ss",
+                               timezone = "Asia/Seoul") val scheduledAt: Calendar,
                        val userId: String) {
     companion object {
         const val LENGTH_MINUTE = 90

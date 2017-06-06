@@ -26,7 +26,7 @@ val laundulerService = Retrofit.Builder()
 interface LaundulerService {
     @Headers("Accept: application/json")
     @GET("machine")
-    fun getMachinesInPlace(@Query("placeId") placeId: Long): Observable<List<Machine>>
+    fun getMachinesInPlace(@Query("location") placeId: Long): Observable<List<Machine>>
 
     @Headers("Accept: application/json")
     @GET("machine/{machineId}")
