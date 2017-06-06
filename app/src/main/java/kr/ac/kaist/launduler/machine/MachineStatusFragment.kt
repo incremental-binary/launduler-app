@@ -30,7 +30,7 @@ abstract class MachineStatusFragment :
         DatePickerDialog.OnDateSetListener,
         TimePickerDialog.OnTimeSetListener {
     var selectedDay: Calendar = Calendar.getInstance()
-    lateinit var machineId: String
+    var machineId = -1L
     var pickedDatetime: Calendar = Calendar.getInstance()
     abstract val floatingActionButtonSrc: Int
 
@@ -44,11 +44,11 @@ abstract class MachineStatusFragment :
                 .toTypedArray()
 
         inline fun <reified T : MachineStatusFragment> newInstance(selectedDay: Calendar? = null,
-                                                                   machineId: String) : T {
+                                                                   machineId: Long) : T {
             val fragment = T::class.createInstance()
             val args = Bundle()
             args.putSerializable(SELECTED_DAY, selectedDay)
-            args.putString(MACHINE_ID, machineId)
+            args.putLong(MACHINE_ID, machineId)
             fragment.arguments = args
             return fragment
         }
@@ -58,7 +58,7 @@ abstract class MachineStatusFragment :
         super.onCreate(savedInstanceState)
         val bundle = savedInstanceState ?: arguments
         bundle.getSerializable(SELECTED_DAY)?.let { selectedDay = it as Calendar }
-        machineId = bundle.getString(MACHINE_ID)
+        machineId = bundle.getLong(MACHINE_ID)
         bundle.getSerializable(PICKED_DATETIME)?.let { pickedDatetime = it as Calendar }
     }
 
@@ -126,7 +126,7 @@ abstract class MachineStatusFragment :
         super.onSaveInstanceState(outState)
         outState?.apply {
             putSerializable(SELECTED_DAY, selectedDay)
-            putString(MACHINE_ID, machineId)
+            putLong(MACHINE_ID, machineId)
             putSerializable(PICKED_DATETIME, pickedDatetime)
         }
     }

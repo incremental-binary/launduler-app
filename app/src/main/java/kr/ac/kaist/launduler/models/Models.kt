@@ -17,8 +17,7 @@ data class Reservation(val id: Long,
                        val machine: String,
                        @JsonFormat(
                                shape = JsonFormat.Shape.STRING,
-                               pattern = "yyyy-MM-dd HH:mm:ss",
-                               timezone = "Asia/Seoul") val scheduledAt: Calendar,
+                               pattern = "yyyy-MM-dd HH:mm:ss") val scheduledAt: Calendar,
                        val userId: String) {
     companion object {
         const val LENGTH_MINUTE = 90

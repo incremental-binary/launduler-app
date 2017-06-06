@@ -17,6 +17,9 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_explore.*
 import kr.ac.kaist.launduler.ExploreActivity.Companion.REQUEST_SELECT_PLACE
 import kr.ac.kaist.launduler.BaseSelectPlaceActivity.EXTRA_PLACE_ID
+import kr.ac.kaist.launduler.machine.ExploreMachineStatusFragment
+import kr.ac.kaist.launduler.machine.MachineStatusFragment
+import kr.ac.kaist.launduler.models.Machine
 import kr.ac.kaist.launduler.services.laundulerService
 
 /**
@@ -27,10 +30,23 @@ import kr.ac.kaist.launduler.services.laundulerService
 class ExploreFragment : RxFragment(), OptionsMenuFragment {
     override val menuResId: Int = R.menu.explore
     var selectedPlaceId = -1L
+    lateinit var machines: List<Machine>
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater!!.inflate(R.layout.fragment_explore, container, false)
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        list_machines.setOnItemClickListener { _, _, i, _ ->
+            val machine = machines[i]
+            val fragment = MachineStatusFragment.newInstance<ExploreMachineStatusFragment>(machineId = machine.id)
+            fragmentManager.beginTransaction()
+                    .replace(R.id.content_frame, fragment, "EXPLORE_MACHINE")
+                    .addToBackStack("EXPLORE")
+                    .commit()
+        }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -79,6 +95,7 @@ class ExploreFragment : RxFragment(), OptionsMenuFragment {
                 .observeOn(AndroidSchedulers.mainThread())
                 .bindToLifecycle(this)
                 .subscribe({
+                    machines = it
                     val adapter = MachineListAdapter(activity, R.layout.item_machine, it)
                     list_machines.adapter = adapter
                 }, {

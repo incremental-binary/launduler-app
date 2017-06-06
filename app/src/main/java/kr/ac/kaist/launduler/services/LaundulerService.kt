@@ -30,7 +30,7 @@ interface LaundulerService {
 
     @Headers("Accept: application/json")
     @GET("machine/{machineId}")
-    fun getMachine(@Path("machineId") machineId: String): Observable<Machine>
+    fun getMachine(@Path("machineId") machineId: Long): Observable<Machine>
 
     @Headers("Accept: application/json")
     @GET("reservation/")
