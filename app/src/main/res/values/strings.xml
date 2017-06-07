@@ -66,4 +66,7 @@
     <string name="machine_in_use">In Use</string>
     <string name="machine_out_of_order">Out of Order</string>
     <string name="error_machines">Failed to retrieve the machine list.</string>
+
+    <!-- Explore > Status of a Machine -->
+    <string name="report_failure">Report a Failure</string>
 </resources>

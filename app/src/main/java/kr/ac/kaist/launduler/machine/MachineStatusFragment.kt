@@ -2,6 +2,7 @@ package kr.ac.kaist.launduler.machine
 
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +17,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import kotlinx.android.synthetic.main.fragment_status_machine.*
+import kr.ac.kaist.launduler.OptionsMenuFragment
 import kr.ac.kaist.launduler.R
 import kr.ac.kaist.launduler.RxBus
+import kr.ac.kaist.launduler.models.Machine
 import kr.ac.kaist.launduler.models.Reservation
 import kr.ac.kaist.launduler.services.laundulerService
 import kotlin.reflect.full.createInstance
@@ -31,6 +34,7 @@ abstract class MachineStatusFragment :
         TimePickerDialog.OnTimeSetListener {
     var selectedDay: Calendar = Calendar.getInstance()
     var machineId = -1L
+    lateinit var machine: Machine
     var pickedDatetime: Calendar = Calendar.getInstance()
     abstract val floatingActionButtonSrc: Int
 
@@ -102,24 +106,26 @@ abstract class MachineStatusFragment :
                 .subscribe { day.goToDate(it as Calendar) }
         laundulerService.getMachine(machineId)
                 .subscribeOn(Schedulers.io())
-                .map { it.reservations }
                 .observeOn(AndroidSchedulers.mainThread())
                 .bindToLifecycle(this)
-                .subscribe({ reservations -> day.setMonthChangeListener { newYear, newMonth ->
-                    reservations
-                            .filter {
-                                val scheduledAt = it.scheduledAt
-                                scheduledAt.get(Calendar.YEAR) == newYear &&
-                                        scheduledAt.get(Calendar.MONTH) == newMonth
-                            }
-                            .map {
-                                WeekViewEvent().apply {
-                                    startTime = it.scheduledAt
-                                    endTime = it.endsAt
+                .subscribe({ m ->
+                    machine = m
+                    day.setMonthChangeListener { newYear, newMonth ->
+                        m.reservations
+                                .filter {
+                                    val scheduledAt = it.scheduledAt
+                                    scheduledAt.get(Calendar.YEAR) == newYear &&
+                                            scheduledAt.get(Calendar.MONTH) == newMonth
                                 }
-                            }
-                } }, { Snackbar.make(view!!, R.string.error_machine_reservations, Snackbar.LENGTH_LONG) })
-        setupToolbar()
+                                .map {
+                                    WeekViewEvent().apply {
+                                        startTime = it.scheduledAt
+                                        endTime = it.endsAt
+                                    }
+                                }
+                    }
+                    setupToolbar()
+                }, { Snackbar.make(view!!, R.string.error_machine_reservations, Snackbar.LENGTH_LONG) })
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {
@@ -154,18 +160,18 @@ abstract class MachineStatusFragment :
 
     abstract fun processPickedDatetime(dt: Calendar)
 
-    abstract fun setupToolbar()
+    fun setupToolbar() {
+        val ab = (activity as AppCompatActivity).supportActionBar
+        ab?.title = machine.serialNum
+    }
 }
 
 
-class ExploreMachineStatusFragment : MachineStatusFragment() {
+class ExploreMachineStatusFragment : MachineStatusFragment(), OptionsMenuFragment {
+    override val menuResId = R.menu.status_machine_explore
     override val floatingActionButtonSrc: Int = R.drawable.ic_add_white_24dp
 
     override fun processPickedDatetime(dt: Calendar) {
-        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun setupToolbar() {
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

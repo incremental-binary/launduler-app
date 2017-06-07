@@ -23,8 +23,6 @@ import java.util.*
 
 class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    lateinit var fragment: Fragment
-
     companion object {
         const val REQUEST_SELECT_PLACE = 1
     }
@@ -35,14 +33,16 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         val toolbar = findViewById(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
+        val fragmentManager = supportFragmentManager
         if (savedInstanceState == null) {
-            fragment = ExploreFragment.newInstance()
-            val fragmentManager = supportFragmentManager
+            val fragment = ExploreFragment.newInstance()
             fragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment, "EXPLORE")
+                    .addToBackStack("EXPLORE")
                     .commit()
         }
+        fragmentManager.addOnBackStackChangedListener { invalidateOptionsMenu() }
 
         val drawer = findViewById(R.id.drawer_layout) as DrawerLayout
         val toggle = ActionBarDrawerToggle(
@@ -63,13 +63,18 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
+        val tag = supportFragmentManager.let {
+            val nStack = it.backStackEntryCount
+            if (nStack > 0) { it.getBackStackEntryAt(it.backStackEntryCount - 1).name } else { null }
+        }
+        val fragment = tag?.let { supportFragmentManager.findFragmentByTag(it) }
         if (fragment is OptionsMenuFragment) {
             fragment.setHasOptionsMenu(true)
-            menuInflater.inflate((fragment as OptionsMenuFragment).menuResId, menu)
+            menuInflater.inflate(fragment.menuResId, menu)
         } else {
-            menu.clear()
+            menu?.clear()
         }
         return true
     }

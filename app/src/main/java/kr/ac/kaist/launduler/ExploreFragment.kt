@@ -44,7 +44,7 @@ class ExploreFragment : RxFragment(), OptionsMenuFragment {
             val fragment = MachineStatusFragment.newInstance<ExploreMachineStatusFragment>(machineId = machine.id)
             fragmentManager.beginTransaction()
                     .replace(R.id.content_frame, fragment, "EXPLORE_MACHINE")
-                    .addToBackStack("EXPLORE")
+                    .addToBackStack("EXPLORE_MACHINE")
                     .commit()
         }
     }
