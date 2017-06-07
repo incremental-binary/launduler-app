@@ -10,10 +10,18 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import com.trello.rxlifecycle2.kotlin.bindToLifecycle
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import kr.ac.kaist.launduler.machine.ExploreMachineStatusFragment
 import kr.ac.kaist.launduler.machine.MachineStatusFragment
+import kr.ac.kaist.launduler.models.Reservation
+import kr.ac.kaist.launduler.services.laundulerService
+import java.util.*
 
 class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -77,20 +85,75 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
 
     @SuppressWarnings("StatementWithEmptyBody")
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val fragmentManager = supportFragmentManager
+
         // Handle navigation view item clicks here.
         val id = item.itemId
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_explore) {
+            val selectedMachineId = selectedMachineId
+            val fragment = MachineStatusFragment.newInstance<ExploreMachineStatusFragment>(null, selectedMachineId)
 
-        } else if (id == R.id.nav_slideshow) {
+            fragmentManager
+                    .beginTransaction()
+                    .replace(R.id.content_frame, fragment, "EXPLORE")
+                    .commit()
+        } else if (id == R.id.nav_reservation) {
+        } else if (id == R.id.nav_timer) {
 
-        } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+            laundulerService.getReservation(userId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    //.bindToLifecycle()
+                    .subscribe(Consumer<kotlin.Any> { o ->
+                Log.d("TimerFragment", "Success")
+                val result = o as List<Reservation>
+                var start: Calendar
+                var end = Calendar.getInstance()
+                var cur = Calendar.getInstance()
+                val curStamp = cur.timeInMillis
+                var idx: Int
+                Log.d("TimerFragment", cur.toString())
+                idx = 0
+                while (idx < result.size) {
+                    start = result[idx].scheduledAt
+                    end = result[idx].endsAt
+                    Log.d("TimerFragment", start.timeInMillis.toString())
+                    Log.d("TimerFragment", curStamp.toString())
+                    Log.d("TimerFragment", end.timeInMillis.toString())
+
+                    if (start.timeInMillis < curStamp && end.timeInMillis > curStamp) {
+                        Log.d("TimerFragment", "Bingo! " + idx.toString())
+                        break
+                    }
+                    idx++
+
+                }
+                val layout:Int
+                var remain:Long = 0
+                if (idx != result.size) {
+
+                    remain = (end.timeInMillis - curStamp) / 1000 / 60
+                    Log.d("TimerFragment", end.toString())
+                    if (remain >= 10)
+                        layout = R.layout.fragment_timer
+                    else
+                        layout = R.layout.fragment_finished
+                } else
+                    layout = R.layout.fragment_noreservation
+                val fragment = TimerFragment.newInstance(layout,remain)
+                        fragmentManager
+                                .beginTransaction()
+                                .replace(R.id.content_frame, fragment, "TIMER")
+                                .commit()
+            }, Consumer<kotlin.Throwable> { throwable -> throwable.printStackTrace() })
+
+
+        } else if (id == R.id.nav_tips) {
+
+        } else if (id == R.id.nav_alternative) {
 
         }
 
@@ -100,4 +163,7 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
     }
     protected val selectedMachineId: String
         get() = "selectedMachine1"
+
+    protected val userId: String
+        get() = "mgjin"
 }
