@@ -7,19 +7,20 @@
 
     <!-- TODO: Update blank fragment layout -->
     <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        android:id="@+id/circular_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        app:cpb_background_progressbar_color="#FFCDD2"
-        app:cpb_background_progressbar_width="10dp"
-        app:cpb_progressbar_color="#F44336"
-        app:cpb_progressbar_width="20dp" />
+        app:cpb_background_progressbar_color="#e7e7e7"
+        app:cpb_background_progressbar_width="15dp"
+        app:cpb_progressbar_color="#32A4ff"
+        app:cpb_progressbar_width="15dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="90"
+        android:text="0"
         android:id="@+id/text_remaining"
         android:textSize="100dp"
         android:layout_centerVertical="true"

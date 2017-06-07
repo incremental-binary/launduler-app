@@ -154,6 +154,9 @@ public class TimerFragment extends RxFragment {
         if(layout == R.layout.fragment_timer) {
             TextView t = (TextView) getView().findViewById(R.id.text_remaining);
             t.setText(String.valueOf(remain - 10));
+            com.mikhaellopez.circularprogressbar.CircularProgressBar c =
+                    (com.mikhaellopez.circularprogressbar.CircularProgressBar) getView().findViewById(R.id.circular_timer);
+            c.setProgress((remain - 10)*100/80);
         }
 
 
