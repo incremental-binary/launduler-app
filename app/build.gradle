@@ -34,26 +34,28 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    // Material datetime picker.
+    testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:design:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.fasterxml.jackson.core:jackson-core:2.8.8'
-    compile "com.fasterxml.jackson.module:jackson-module-kotlin:2.8.8"
+    compile 'com.fasterxml.jackson.module:jackson-module-kotlin:2.8.8'
     compile 'com.squareup.retrofit2:converter-jackson:2.3.0'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    // Because RxAndroid releases are few and far between, it is recommended you also
-    // explicitly depend on RxJava's latest version for bug fixes and new features.
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'com.github.alamkanak:android-week-view:1.2.6'
     compile 'com.trello.rxlifecycle2:rxlifecycle-kotlin:2.1.0'
     compile 'com.trello.rxlifecycle2:rxlifecycle-components:2.1.0'
-    // Material datetime picker.
     compile 'co.infinum:materialdatetimepicker-support:3.2.2'
-    testCompile 'junit:junit:4.12'
+    compile 'com.mikhaellopez:circularprogressbar:1.1.1'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
 }
 repositories {
     mavenCentral()

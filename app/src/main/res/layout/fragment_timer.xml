@@ -1,0 +1,37 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".TimerFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+        android:id="@+id/circular_timer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        app:cpb_background_progressbar_color="#e7e7e7"
+        app:cpb_background_progressbar_width="15dp"
+        app:cpb_progressbar_color="#32A4ff"
+        app:cpb_progressbar_width="15dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/text_remaining"
+        android:textSize="100dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="mins\nleft"
+        android:textSize="20dp"
+        android:id="@+id/textView2"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/text_remaining" />
+</RelativeLayout>

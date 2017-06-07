@@ -22,3 +22,4 @@
 -keep class org.jetbrains.** { *; }
 -keep class **.*Fragment
 -keep class kr.ac.kaist.launduler.models.** { *; }
+-keep class kr.ac.kaist.launduler.*Deserializer
