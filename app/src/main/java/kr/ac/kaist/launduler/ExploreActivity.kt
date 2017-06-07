@@ -87,9 +87,7 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         val id = item.itemId
 
         if (id == R.id.nav_explore) {
-            val selectedMachineId = selectedMachineId
-            val fragment = MachineStatusFragment.newInstance<ExploreMachineStatusFragment>(null, selectedMachineId)
-
+            val fragment = ExploreFragment.newInstance()
             fragmentManager
                     .beginTransaction()
                     .replace(R.id.content_frame, fragment, "EXPLORE")
@@ -157,9 +155,6 @@ class ExploreActivity : AppCompatActivity(), NavigationView.OnNavigationItemSele
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
-
-    protected val selectedMachineId: String
-        get() = "selectedMachine1"
 
     protected val userId: String
         get() = "mgjin"
